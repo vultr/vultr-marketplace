@@ -6,8 +6,7 @@
 
 ### Instructions
 
-1. Choose an Ubuntu or macOS workstation.
-1. Install [HashiCorp Packer](https://learn.hashicorp.com/tutorials/packer/get-started-install-cli) on your workstation.
+1. Install [HashiCorp Packer](https://learn.hashicorp.com/tutorials/packer/get-started-install-cli) on your Ubuntu or macOS workstation.
 1. Add your workstation's IP address to your [Vultr API access control list](https://my.vultr.com/settings/#settingsapi).
 1. Clone this repository to your workstation.
 
