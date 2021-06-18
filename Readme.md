@@ -14,7 +14,7 @@
 
 1. Run the Marketplace Builder.
 
-        $ cd example-scripts
+        $ cd vultr-marketplace/example-scripts
         $ ./marketplace-builder.sh
 
 You'll be prompted to select a single OS, or you can choose to build all OS snapshots in a batch. The script creates Marketplace snapshots in your account named "**MKT-{OS} {Date Time}**".
