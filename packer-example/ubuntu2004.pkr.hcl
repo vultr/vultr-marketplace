@@ -13,27 +13,27 @@ packer {
     }
 }
 
-source "vultr" "debian10" {
+source "vultr" "ubuntu2004" {
   api_key              = "${var.vultr_api_key}"
-  os_id                = "352"
+  os_id                = "387"
   plan_id              = "vc2-1c-1gb"
   region_id            = "ewr"
-  snapshot_description = "MKT-Debian 10 ${formatdate("YYYY-MM-DD hh:mm", timestamp())}"
+  snapshot_description = "MKT-Ubuntu 20.04 LTS ${formatdate("YYYY-MM-DD hh:mm", timestamp())}"
   ssh_username         = "root"
   state_timeout        = "25m"
 }
 
 build {
-  sources = ["source.vultr.debian10"]
+  sources = ["source.vultr.ubuntu2004"]
 
   provisioner "file" {
-    source = "vultr-helper.sh"
+    source = "../example-scripts/vultr-helper.sh"
     destination = "/root/vultr-helper.sh"
   }
 
   provisioner "shell" {
-    script = "debian10.sh"
+    script = "ubuntu2004.sh"
     remote_folder = "/root"
-    remote_file = "debian10.sh"
+    remote_file = "ubuntu2004.sh"
   }
 }
