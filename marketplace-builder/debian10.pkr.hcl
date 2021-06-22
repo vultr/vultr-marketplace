@@ -13,27 +13,27 @@ packer {
     }
 }
 
-source "vultr" "centos8" {
+source "vultr" "debian10" {
   api_key              = "${var.vultr_api_key}"
-  os_id                = "362"
+  os_id                = "352"
   plan_id              = "vc2-1c-1gb"
   region_id            = "ewr"
-  snapshot_description = "MKT-CentOS 8 ${formatdate("YYYY-MM-DD hh:mm", timestamp())}"
+  snapshot_description = "MKT-Debian 10 ${formatdate("YYYY-MM-DD hh:mm", timestamp())}"
   ssh_username         = "root"
   state_timeout        = "25m"
 }
 
 build {
-  sources = ["source.vultr.centos8"]
+  sources = ["source.vultr.debian10"]
 
   provisioner "file" {
-    source = "vultr-helper.sh"
+    source = "../example-scripts/vultr-helper.sh"
     destination = "/root/vultr-helper.sh"
   }
 
   provisioner "shell" {
-    script = "centos8.sh"
+    script = "debian10.sh"
     remote_folder = "/root"
-    remote_file = "centos8.sh"
+    remote_file = "debian10.sh"
   }
 }

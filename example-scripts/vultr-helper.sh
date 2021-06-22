@@ -241,6 +241,7 @@ function disable_network_manager() {
 function clean_system() {
 
     update_and_clean_packages
+    set_vultr_kernel_option
     clean_tmp
     clean_keys
     clean_logs
