@@ -22,7 +22,7 @@ The following steps are a high-level overview of the Vultr Marketplace build pro
 
 ## Vultr Helper Script
 
-The scripts in this repository use the `vultr-helper.sh` helper functions. You can use these in your scripts and modify them as needed. You'll find `vultr-helper.sh` in the example-scripts directory.
+The scripts in this repository use the `vultr-helper.sh` helper functions. You can use these in your scripts and modify them as needed. You'll find `vultr-helper.sh` in the [example-scripts](/example-scripts) directory.
 
 ## Example Automation with Packer
 
