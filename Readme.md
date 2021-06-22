@@ -26,7 +26,7 @@ The scripts in this repository use the `vultr-helper.sh` helper functions. You c
 
 ## Example Automation with Packer
 
-The packer-example directory is a template for creating an automated Vultr Marketplace build pipeline. It's a stripped-down example pulled from the Marketplace Builder, without all the wrappers.
+The [packer-example](/packer-example) directory is a template for creating an automated Vultr Marketplace build pipeline. It's a stripped-down example pulled from the Marketplace Builder, without all the wrappers.
 
 1. If you desire a debug log, export these two variables:
 
@@ -45,7 +45,7 @@ The result is an Ubuntu 20.04 LTS snapshot suitable for the Vultr Marketplace.
 
 ## Marketplace Builder
 
-For quick prototyping or to learn how the Vultr Marketplace works, you can use the Vultr Marketplace Builder. It creates Vultr Marketplace snapshots with the correct version of cloud-init installed. Marketplace Builder can create snapshots for:
+For quick prototyping or to learn how the Vultr Marketplace works, you can use the [Vultr Marketplace Builder](/marketplace-builder). It creates Vultr Marketplace snapshots with the correct version of cloud-init installed. Marketplace Builder can create snapshots for:
 
 * CentOS 7
 * CentOS 8
