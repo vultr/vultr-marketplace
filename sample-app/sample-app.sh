@@ -47,3 +47,4 @@ error_detect_off
 clean_mloc
 clean_free_space
 trim_ssd
+cleanup_marketplace_scripts
