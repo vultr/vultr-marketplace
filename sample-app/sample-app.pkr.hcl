@@ -31,6 +31,16 @@ build {
     destination = "/root/vultr-helper.sh"
   }
 
+  provisioner "file" {
+    source = "setup-per-boot.sh"
+    destination = "/root/setup-per-boot.sh"
+  }
+
+  provisioner "file" {
+    source = "setup-per-instance.sh"
+    destination = "/root/setup-per-instance.sh"
+  }
+
   provisioner "shell" {
     script = "sample-app.sh"
     remote_folder = "/root"
