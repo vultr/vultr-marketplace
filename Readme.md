@@ -38,26 +38,40 @@ The scripts in this repository use helper functions found in [vultr-helper.sh](/
 
 ## Example Automation with Packer
 
-The [packer-example](/packer-example) directory is a template for creating an automated Vultr Marketplace build pipeline. It's a stripped-down example pulled from the Marketplace Builder without all the wrappers.
+The [packer-example](/packer-example) directory is a stripped-down template for creating an automated Vultr Marketplace build pipeline.
+
+1. Clone the repository to your workstation.
+
+        $ git clone https://github.com/vultr/vultr-marketplace.git
+
+1. Install [HashiCorp Packer](https://learn.hashicorp.com/tutorials/packer/get-started-install-cli).
+1. Verify your workstation's IP address is in your [Vultr API access control list](https://my.vultr.com/settings/#settingsapi).
+1. Publish your API key.
+
+        $ export VULTR_API_KEY=<Your API Key>
 
 1. If you desire a debug log, export these two variables:
 
         $ export PACKER_LOG=1
         $ export PACKER_LOG_PATH=packer.log
 
+1. Change to the Packer example directory.
+
+        $ cd vultr-marketplace/packer-example
+
 1. Use `packer init` to automatically download the Vultr Packer Plugin.
 
-        $ packer init ubuntu2004.pkr.hcl
+        $ packer init packer-example.pkr.hcl
 
 1. Use `packer build` to automatically deploy a server, prepare it, make a snapshot, and then destroy the original server.
 
-        $ packer build ubuntu2004.pkr.hcl
+        $ packer build packer-example.pkr.hcl
 
 The result is an Ubuntu 20.04 LTS snapshot suitable for the Vultr Marketplace.
 
 ## Sample Application
 
-The example in the [sample-app](/sample-app) directory installs Nginx, MariaDB, and uses the Vultr application variable feature. It creates a database user and sets up basic authentication for the web server. We have a [complete walkthrough of this sample app in our documentation library](https://www.vultr.com/docs/how-to-build-an-example-vultr-marketplace-application).
+The [sample application](/sample-app) installs Nginx, MariaDB, and uses the Vultr application variable feature. It creates a database user and sets up basic authentication for the web server. We have a [complete walkthrough of this sample app in our documentation library](https://www.vultr.com/docs/how-to-build-an-example-vultr-marketplace-application).
 
 ## Marketplace Builder
 
@@ -78,6 +92,11 @@ Marketplace Builder runs in `bash` or `zsh`. It has been tested on macOS, Ubuntu
 1. Publish your API key.
 
         $ export VULTR_API_KEY=<Your API Key>
+
+1. If you desire a debug log, export these two variables:
+
+        $ export PACKER_LOG=1
+        $ export PACKER_LOG_PATH=packer.log
 
 ### Instructions
 
