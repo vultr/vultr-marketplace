@@ -42,16 +42,16 @@ The [packer-example](/packer-example) directory is a template for creating an au
 
 1. If you desire a debug log, export these two variables:
 
-        export PACKER_LOG=1
-        export PACKER_LOG_PATH=packer.log
+        $ export PACKER_LOG=1
+        $ export PACKER_LOG_PATH=packer.log
 
 1. Use `packer init` to automatically download the Vultr Packer Plugin.
 
-        packer init ubuntu2004.pkr.hcl
+        $ packer init ubuntu2004.pkr.hcl
 
 1. Use `packer build` to automatically deploy a server, prepare it, make a snapshot, and then destroy the original server.
 
-        packer build ubuntu2004.pkr.hcl
+        $ packer build ubuntu2004.pkr.hcl
 
 The result is an Ubuntu 20.04 LTS snapshot suitable for the Vultr Marketplace.
 
@@ -77,7 +77,7 @@ Marketplace Builder runs in `bash` or `zsh`. It has been tested on macOS, Ubuntu
 1. Verify your workstation's IP address is in your [Vultr API access control list](https://my.vultr.com/settings/#settingsapi).
 1. Publish your API key.
 
-        export VULTR_API_KEY=<Your API Key>
+        $ export VULTR_API_KEY=<Your API Key>
 
 ### Instructions
 
