@@ -27,7 +27,7 @@ build {
   sources = ["source.vultr.ubuntu2004"]
 
   provisioner "file" {
-    source = "../example-scripts/vultr-helper.sh"
+    source = "../helper-scripts/vultr-helper.sh"
     destination = "/root/vultr-helper.sh"
   }
 

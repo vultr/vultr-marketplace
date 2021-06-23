@@ -2,8 +2,6 @@
 
 ###################################################################
 ## Vultr Marketplace Helper Functions
-## Forked from https://github.com/eb3095/vultr-marketplace-scripts
-###################################################################
 
 function error_detect_on() {
     set -euo pipefail
@@ -221,12 +219,7 @@ function clean_cloud_init() {
 }
 
 function cleanup_marketplace_scripts() {
-    rm -f /root/centos7.sh
-    rm -f /root/centos8.sh
-    rm -f /root/debian10.sh
-    rm -f /root/ubuntu1804.sh
-    rm -f /root/ubuntu2004.sh
-    rm -f /root/vultr-helper.sh
+    rm -f /root/*.sh
 }
 
 function disable_network_manager() {
@@ -259,6 +252,5 @@ function clean_system() {
     ## Resume error checking
     error_detect_on
 
-    clean_cloud_init
     cleanup_marketplace_scripts
 }

@@ -13,18 +13,18 @@ packer {
     }
 }
 
-source "vultr" "centos7" {
+source "vultr" "packer-example" {
   api_key              = "${var.vultr_api_key}"
-  os_id                = "167"
+  os_id                = "387"
   plan_id              = "vc2-1c-1gb"
   region_id            = "ewr"
-  snapshot_description = "MKT-CentOS 7 ${formatdate("YYYY-MM-DD hh:mm", timestamp())}"
+  snapshot_description = "Packer Example ${formatdate("YYYY-MM-DD hh:mm", timestamp())}"
   ssh_username         = "root"
   state_timeout        = "25m"
 }
 
 build {
-  sources = ["source.vultr.centos7"]
+  sources = ["source.vultr.packer-example"]
 
   provisioner "file" {
     source = "../helper-scripts/vultr-helper.sh"
@@ -32,8 +32,8 @@ build {
   }
 
   provisioner "shell" {
-    script = "centos7.sh"
+    script = "packer-example.sh"
     remote_folder = "/root"
-    remote_file = "centos7.sh"
+    remote_file = "packer-example.sh"
   }
 }

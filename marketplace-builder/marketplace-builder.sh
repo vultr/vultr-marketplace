@@ -5,7 +5,6 @@ echo "Checking dependencies."
 echo ""
 #################################
 ## Test API access
-##
 if [[ -z "${VULTR_API_KEY}" ]]; then
   echo ""
   echo "Please export your API key."
@@ -31,7 +30,6 @@ echo "Workstation has API access."
 
 #################################
 ## Check for HashiCorp Packer
-##
 packer --version &> /dev/null
 if [[ $? -ne 0 ]]; then
   echo ""
@@ -46,7 +44,6 @@ echo "Packer is installed."
 
 #################################
 ## Start building snapshots.
-##
 echo ""
 echo ""
 echo "-----------------------------------------------------------------------"
@@ -76,7 +73,6 @@ fi
 
 #################################
 ## Ubuntu 20.04
-##
 if [[ "${OSVER}" == "1" || "${OSVER}" == "0" ]]; then
   export PACKER_LOG=1
   export PACKER_LOG_PATH=packer-Ubuntu2004.log
@@ -86,7 +82,6 @@ fi
 
 #################################
 ## Debian 10
-##
 if [[ "${OSVER}" == "2" || "${OSVER}" == "0" ]]; then
   export PACKER_LOG=1
   export PACKER_LOG_PATH=packer-Debian10.log
@@ -96,7 +91,6 @@ fi
 
 #################################
 ## CentOS 7
-##
 if [[ "${OSVER}" == "3" || "${OSVER}" == "0" ]]; then
   export PACKER_LOG=1
   export PACKER_LOG_PATH=packer-CentOS7.log
@@ -106,7 +100,6 @@ fi
 
 #################################
 ## CentOS 8
-##
 if [[ "${OSVER}" == "4" || "${OSVER}" == "0" ]]; then
   export PACKER_LOG=1
   export PACKER_LOG_PATH=packer-CentOS8.log
@@ -116,7 +109,6 @@ fi
 
 #################################
 ## Ubuntu 18.04
-##
 if [[ "${OSVER}" == "5" || "${OSVER}" == "0" ]]; then
   export PACKER_LOG=1
   export PACKER_LOG_PATH=packer-Ubuntu1804.log

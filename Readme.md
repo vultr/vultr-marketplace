@@ -1,32 +1,44 @@
 # Vultr Marketplace Vendor Tools
 
-This repository has helper scripts for Vultr Marketplace vendors. You'll also find the Marketplace Builder, an example automated build script. To learn more about the Vultr Marketplace, please see [our documentation library](https://www.vultr.com/docs/vultr-marketplace).
+This repository has helper scripts and examples for Vultr Marketplace vendors. You'll also find the Marketplace Builder, an example automated build script. To learn more about the Vultr Marketplace, please see [our documentation library](https://www.vultr.com/docs/vultr-marketplace).
+
+## Apply to Become a Vendor
 
 If you have an application that you'd like to publish in the Vultr Marketplace, [please apply to become a vendor](https://www.vultr.com/marketplace/become-a-verified-vendor/).
 
-## Overview
+### Table of Contents
 
-The following steps are a high-level overview of the Vultr Marketplace build process. Follow the documentation links for more details.
+* [Apply to Become a Vendor](#apply-to-become-a-vendor)
+* [Vultr Marketplace Process Overview](#vultr-marketplace-process-overview)
+* [Vultr Helper Script](#vultr-helper-script)
+* [Example Automation with Packer](#example-automation-with-packer)
+* [Sample Application](#sample-application)
+* [Marketplace Builder](#marketplace-builder)
 
-1. [Create a vendor account](https://www.vultr.com/docs/marketplace-vendor-settings) and update your contact information.
-1. Create a new [Application Profile](https://www.vultr.com/docs/marketplace-applications).
-1. Update the [General Information](https://www.vultr.com/docs/vultr-marketplace-general-information) and [Support Information](https://www.vultr.com/docs/vultr-marketplace-support-information).
-1. If you need an auto-generated password, set up your [Application Variables](https://www.vultr.com/docs/vultr-marketplace-application-variables).
-1. Create your [application instructions](https://www.vultr.com/docs/vultr-marketplace-application-instructions). See our formatting tips for [Readme and App Instructions](https://www.vultr.com/docs/vultr-marketplace-tips-for-readme-and-app-instructions).
-1. Upload your [application screenshots and featured images](https://www.vultr.com/docs/vultr-marketplace-gallery).
-1. Make sure your application meets the [Vultr Marketplace](https://www.vultr.com/docs/vultr-marketplace-requirements) requirements. This GitHub repository has helper scripts to assist this process.
-1. [Create provisioning scripts](https://www.vultr.com/docs/vultr-marketplace-variables-and-provisioning-scripts) to perform any required actions after a customer deploys your app.
-1. [Create a snapshot](https://www.vultr.com/docs/vultr-marketplace-snapshots) of your application.
-1. Assign your snapshot as a [Vultr Marketplace build](https://www.vultr.com/docs/vultr-marketplace-builds).
-1. [Publish your application](https://www.vultr.com/docs/vultr-marketplace-publication-settings) in the Vultr Marketplace.
+## Vultr Marketplace Process Overview
+
+This is a high-level overview of the Vultr Marketplace build process, with links to documentation. If you are new to the Vultr Marketplace, please start with the [Vultr Marketplace Introduction](https://www.vultr.com/docs/vultr-marketplace).
+
+1. [Create a vendor account and update your contact information](https://www.vultr.com/docs/marketplace-vendor-settings).
+1. [Create a new application profile](https://www.vultr.com/docs/marketplace-applications).
+1. [Update the general information](https://www.vultr.com/docs/vultr-marketplace-general-information).
+1. [Update the support information](https://www.vultr.com/docs/vultr-marketplace-support-information).
+1. [Create application variables if you need auto-generated passwords](https://www.vultr.com/docs/vultr-marketplace-application-variables).
+1. [Create your application instructions](https://www.vultr.com/docs/vultr-marketplace-application-instructions). See our [formatting tips](https://www.vultr.com/docs/vultr-marketplace-tips-for-readme-and-app-instructions).
+1. [Upload your application screenshots and featured images](https://www.vultr.com/docs/vultr-marketplace-gallery).
+1. [Verify your application has the required software installed](https://www.vultr.com/docs/vultr-marketplace-requirements). This GitHub repository has helper scripts and examples.
+1. [Create your provisioning scripts](https://www.vultr.com/docs/vultr-marketplace-variables-and-provisioning-scripts).
+1. [Create a snapshot of your application](https://www.vultr.com/docs/vultr-marketplace-snapshots).
+1. [Assign your snapshot as a Vultr Marketplace build](https://www.vultr.com/docs/vultr-marketplace-builds).
+1. [Publish your application in the Vultr Marketplace](https://www.vultr.com/docs/vultr-marketplace-publication-settings).
 
 ## Vultr Helper Script
 
-The scripts in this repository use the `vultr-helper.sh` helper functions. You can use these in your scripts and modify them as needed. You'll find `vultr-helper.sh` in the [example-scripts](/example-scripts) directory.
+The scripts in this repository use helper functions found in [vultr-helper.sh](/helper-scripts/vultr-helper.sh). You can use these in your scripts and modify them as needed.
 
 ## Example Automation with Packer
 
-The [packer-example](/packer-example) directory is a template for creating an automated Vultr Marketplace build pipeline. It's a stripped-down example pulled from the Marketplace Builder, without all the wrappers.
+The [packer-example](/packer-example) directory is a template for creating an automated Vultr Marketplace build pipeline. It's a stripped-down example pulled from the Marketplace Builder without all the wrappers.
 
 1. If you desire a debug log, export these two variables:
 
@@ -42,6 +54,10 @@ The [packer-example](/packer-example) directory is a template for creating an au
         packer build ubuntu2004.pkr.hcl
 
 The result is an Ubuntu 20.04 LTS snapshot suitable for the Vultr Marketplace.
+
+## Sample Application
+
+The example in the [sample-app](/sample-app) directory installs Nginx, MariaDB, and uses the Vultr application variable feature. It creates a database user and sets up basic authentication for the web server. We have a [complete walkthrough of this sample app in our documentation library](https://www.vultr.com/docs/how-to-build-an-example-vultr-marketplace-application).
 
 ## Marketplace Builder
 
@@ -74,4 +90,5 @@ Marketplace Builder runs in `bash` or `zsh`. It has been tested on macOS, Ubuntu
         $ cd vultr-marketplace/marketplace-builder
         $ ./marketplace-builder.sh
 
-Marketplace Builder prompts you to select one OS or build all snapshots in a batch. The script creates Vultr Marketplace snapshots named `MKT-<OS> <Date Time>` in your Vultr account, ready to be added to the Vultr Marketplace.
+The Marketplace Builder prompts you to select one OS or build all snapshots in a batch. When finished, the script creates snapshots named `MKT-<OS> <Date Time>` in your Vultr account, ready to be added to the Vultr Marketplace.
+
