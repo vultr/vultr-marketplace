@@ -6,23 +6,24 @@ If you have an application that you'd like to publish in the Vultr Marketplace, 
 
 ## Overview
 
-The following steps are a high-level overview of the Vultr Marketplace build process. Follow the documentation links for more details.
+This is a high-level overview of the Vultr Marketplace build process, with documentation links for more detail.
 
-1. [Create a vendor account](https://www.vultr.com/docs/marketplace-vendor-settings) and update your contact information.
-1. Create a new [Application Profile](https://www.vultr.com/docs/marketplace-applications).
-1. Update the [General Information](https://www.vultr.com/docs/vultr-marketplace-general-information) and [Support Information](https://www.vultr.com/docs/vultr-marketplace-support-information).
-1. If you need an auto-generated password, set up your [Application Variables](https://www.vultr.com/docs/vultr-marketplace-application-variables).
-1. Create your [application instructions](https://www.vultr.com/docs/vultr-marketplace-application-instructions). See our formatting tips for [Readme and App Instructions](https://www.vultr.com/docs/vultr-marketplace-tips-for-readme-and-app-instructions).
-1. Upload your [application screenshots and featured images](https://www.vultr.com/docs/vultr-marketplace-gallery).
-1. Make sure your application meets the [Vultr Marketplace](https://www.vultr.com/docs/vultr-marketplace-requirements) requirements. This GitHub repository has helper scripts to assist this process.
-1. [Create provisioning scripts](https://www.vultr.com/docs/vultr-marketplace-variables-and-provisioning-scripts) to perform any required actions after a customer deploys your app.
-1. [Create a snapshot](https://www.vultr.com/docs/vultr-marketplace-snapshots) of your application.
-1. Assign your snapshot as a [Vultr Marketplace build](https://www.vultr.com/docs/vultr-marketplace-builds).
-1. [Publish your application](https://www.vultr.com/docs/vultr-marketplace-publication-settings) in the Vultr Marketplace.
+1. [Create a vendor account and update your contact information](https://www.vultr.com/docs/marketplace-vendor-settings).
+1. [Create a new application profile](https://www.vultr.com/docs/marketplace-applications).
+1. [Update the general information](https://www.vultr.com/docs/vultr-marketplace-general-information).
+1. [Update the support information](https://www.vultr.com/docs/vultr-marketplace-support-information).
+1. [Create application variables if you need auto-generated passwords](https://www.vultr.com/docs/vultr-marketplace-application-variables).
+1. [Create your application instructions](https://www.vultr.com/docs/vultr-marketplace-application-instructions). See our [formatting tips](https://www.vultr.com/docs/vultr-marketplace-tips-for-readme-and-app-instructions).
+1. [Upload your application screenshots and featured images](https://www.vultr.com/docs/vultr-marketplace-gallery).
+1. [Verify your application has the required software installed](https://www.vultr.com/docs/vultr-marketplace-requirements). This GitHub repository has helper scripts and examples.
+1. [Create your provisioning scripts](https://www.vultr.com/docs/vultr-marketplace-variables-and-provisioning-scripts).
+1. [Create a snapshot of your application](https://www.vultr.com/docs/vultr-marketplace-snapshots).
+1. [Assign your snapshot as a Vultr Marketplace build](https://www.vultr.com/docs/vultr-marketplace-builds).
+1. [Publish your application in the Vultr Marketplace](https://www.vultr.com/docs/vultr-marketplace-publication-settings).
 
 ## Vultr Helper Script
 
-The scripts in this repository use the `vultr-helper.sh` helper functions. You can use these in your scripts and modify them as needed. You'll find `vultr-helper.sh` in the [example-scripts](/example-scripts) directory.
+The scripts in this repository use the `vultr-helper.sh` helper functions. You can use these in your scripts and modify them as needed. You'll find `vultr-helper.sh` in the [helper-scripts](/helper-scripts) directory.
 
 ## Example Automation with Packer
 

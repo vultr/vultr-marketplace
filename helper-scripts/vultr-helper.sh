@@ -2,8 +2,6 @@
 
 ###################################################################
 ## Vultr Marketplace Helper Functions
-## Forked from https://github.com/eb3095/vultr-marketplace-scripts
-###################################################################
 
 function error_detect_on() {
     set -euo pipefail
