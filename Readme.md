@@ -9,13 +9,13 @@ If you have an application that you'd like to publish in the Vultr Marketplace, 
 ### Table of Contents
 
 * [Apply to Become a Vendor](#apply-to-become-a-vendor)
-* [Vultr Marketpace Process Overview](#vultr-marketpace-process-overview)
+* [Vultr Marketplace Process Overview](#vultr-marketplace-process-overview)
 * [Vultr Helper Script](#vultr-helper-script)
 * [Example Automation with Packer](#example-automation-with-packer)
 * [Sample Application](#sample-application)
 * [Marketplace Builder](#marketplace-builder)
 
-## Vultr Marketpace Process Overview
+## Vultr Marketplace Process Overview
 
 This is a high-level overview of the Vultr Marketplace build process, with links to documentation. If you are new to the Vultr Marketplace, please start with the [Vultr Marketplace Introduction](https://www.vultr.com/docs/vultr-marketplace).
 
@@ -38,7 +38,7 @@ The scripts in this repository use helper functions found in [vultr-helper.sh](/
 
 ## Example Automation with Packer
 
-The [packer-example](/packer-example) directory is a template for creating an automated Vultr Marketplace build pipeline. It's a stripped-down example pulled from the Marketplace Builder, without all the wrappers.
+The [packer-example](/packer-example) directory is a template for creating an automated Vultr Marketplace build pipeline. It's a stripped-down example pulled from the Marketplace Builder without all the wrappers.
 
 1. If you desire a debug log, export these two variables:
 
@@ -57,7 +57,7 @@ The result is an Ubuntu 20.04 LTS snapshot suitable for the Vultr Marketplace.
 
 ## Sample Application
 
-You'll find more complete example app in the [sample-app](/sample-app) directory. This sample app installs Nginx, MariaDB, and uses the Vultr application variable feature to create a database users and setup basic authentication for the web server. We have a [complete walkthrough of this sample app in our documentation library](https://www.vultr.com/docs/how-to-build-an-example-vultr-marketplace-application).
+The example in the [sample-app](/sample-app) directory installs Nginx, MariaDB, and uses the Vultr application variable feature. It creates a database user and sets up basic authentication for the web server. We have a [complete walkthrough of this sample app in our documentation library](https://www.vultr.com/docs/how-to-build-an-example-vultr-marketplace-application).
 
 ## Marketplace Builder
 
@@ -90,5 +90,5 @@ Marketplace Builder runs in `bash` or `zsh`. It has been tested on macOS, Ubuntu
         $ cd vultr-marketplace/marketplace-builder
         $ ./marketplace-builder.sh
 
-Marketplace Builder prompts you to select one OS or build all snapshots in a batch. The script creates Vultr Marketplace snapshots named `MKT-<OS> <Date Time>` in your Vultr account, ready to be added to the Vultr Marketplace.
+The Marketplace Builder prompts you to select one OS or build all snapshots in a batch. When finished, the script creates snapshots named `MKT-<OS> <Date Time>` in your Vultr account, ready to be added to the Vultr Marketplace.
 
