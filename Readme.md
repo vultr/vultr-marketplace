@@ -2,15 +2,6 @@
 
 This repository has helper scripts and examples for Vultr Marketplace vendors. You'll also find the Marketplace Builder, an example automated build script. To learn more about the Vultr Marketplace, please see [our documentation library](https://www.vultr.com/docs/vultr-marketplace).
 
-### Table of Contents
-
-* [Apply to Become a Vendor](#apply-to-become-a-vendor)
-* [Vultr Marketplace Process Overview](#vultr-marketplace-process-overview)
-* [Vultr Helper Script](#vultr-helper-script)
-* [Marketplace Builder](#marketplace-builder)
-* [Example Automation with Packer](#example-automation-with-packer)
-* [Sample Application](#sample-application)
-
 ## Apply to Become a Vendor
 
 If you have an application that you'd like to publish in the Vultr Marketplace, [please apply to become a vendor](https://www.vultr.com/marketplace/become-a-verified-vendor/).
@@ -34,7 +25,7 @@ This is a high-level overview of the Vultr Marketplace build process, with links
 
 ## Vultr Helper Script
 
-The scripts in this repository use helper functions found in [vultr-helper.sh](/helper-scripts/vultr-helper.sh). You can use these in your scripts and modify them as needed.
+The scripts in this repository use helper functions in [vultr-helper.sh](/helper-scripts/vultr-helper.sh). You can adapt these as needed in your scripts.
 
 ## Marketplace Builder
 
@@ -42,36 +33,7 @@ For quick prototyping or to learn how the Vultr Marketplace works, you can use t
 
 ## Example Automation with Packer
 
-The [packer-example](/packer-example) directory is a stripped-down template for creating an automated Vultr Marketplace build pipeline.
-
-1. Clone the repository to your workstation.
-
-        $ git clone https://github.com/vultr/vultr-marketplace.git
-
-1. Install [HashiCorp Packer](https://learn.hashicorp.com/tutorials/packer/get-started-install-cli).
-1. Verify your workstation's IP address is in your [Vultr API access control list](https://my.vultr.com/settings/#settingsapi).
-1. Publish your API key.
-
-        $ export VULTR_API_KEY=<Your API Key>
-
-1. If you desire a debug log, export these two variables:
-
-        $ export PACKER_LOG=1
-        $ export PACKER_LOG_PATH=packer.log
-
-1. Change to the Packer example directory.
-
-        $ cd vultr-marketplace/packer-example
-
-1. Use `packer init` to automatically download the Vultr Packer Plugin.
-
-        $ packer init packer-example.pkr.hcl
-
-1. Use `packer build` to automatically deploy a server, prepare it, make a snapshot, and then destroy the original server.
-
-        $ packer build packer-example.pkr.hcl
-
-The result is an Ubuntu 20.04 LTS snapshot suitable for the Vultr Marketplace.
+The [packer-example](/packer-example) directory is a template for creating an automated Vultr Marketplace build pipeline. See [the Readme](/packer-example/Readme.md) for more information.
 
 ## Sample Application
 
