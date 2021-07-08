@@ -213,11 +213,6 @@ function trim_ssd() {
     fstrim /
 }
 
-function clean_cloud_init() {
-    rm -rf /var/lib/cloud/instances/*
-    cloud-init clean
-}
-
 function cleanup_marketplace_scripts() {
     rm -f /root/*.sh
 }

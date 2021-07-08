@@ -16,19 +16,6 @@ apt_safe nginx mariadb-server apache2-utils
 sed -i'' "/^\tlocation \/ {$/a \ \t\tauth_basic \"Restricted Content\";\n\t\tauth_basic_user_file /etc/nginx/.htpasswd;" /etc/nginx/sites-enabled/default
 
 ################################################
-## Prepare server snapshot for Marketplace
-
-update_and_clean_packages
-set_vultr_kernel_option
-clean_tmp
-clean_keys
-clean_logs
-clean_history
-clean_random
-clean_machine_id
-clean_cloud_init
-
-################################################
 ## Install provisioning scripts
 mkdir -p /var/lib/cloud/scripts/per-boot/
 mkdir -p /var/lib/cloud/scripts/per-instance/
@@ -40,11 +27,6 @@ chmod +x /var/lib/cloud/scripts/per-boot/setup-per-boot.sh
 chmod +x /var/lib/cloud/scripts/per-instance/setup-per-instance.sh
 
 ################################################
-## Finish cleanup and wipe free disk space
-## Non-zero return codes are benign and expected.
-error_detect_off
+## Prepare server for Marketplace snapshot
 
-clean_mloc
-clean_free_space
-trim_ssd
-cleanup_marketplace_scripts
+clean_system
