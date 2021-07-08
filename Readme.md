@@ -29,11 +29,11 @@ The scripts in this repository use helper functions in [vultr-helper.sh](/helper
 
 ## Marketplace Builder
 
-For quick prototyping or to learn how the Vultr Marketplace works, you can use the [Vultr Marketplace Builder](/marketplace-builder). See [the Readme](/marketplace-builder)) for more information.
+For quick prototyping or to learn how the Vultr Marketplace works, you can use the [Vultr Marketplace Builder](/marketplace-builder).
 
 ## Example Automation with Packer
 
-The [packer-example](/packer-example) directory is a template for creating an automated Vultr Marketplace build pipeline. See [the Readme](/packer-example) for more information.
+The [packer-example](/packer-example) directory is a template for creating an automated Vultr Marketplace build pipeline.
 
 ## Sample Application
 
