@@ -16,11 +16,6 @@ function get_hostname() {
     echo "${HOSTNAME}"
 }
 
-function get_root_password() {
-    ROOTPW=$(curl -H "Metadata-Token: vultr" --fail -s "http://169.254.169.254/v1/internal/root-password")
-    echo "${ROOTPW}"
-}
-
 function get_userdata() {
     USERDATA=$(curl --fail -s "http://169.254.169.254/latest/user-data")
     echo "${USERDATA}"
