@@ -124,7 +124,7 @@ function install_cloud_init() {
     fi
 
     if [[ "$(grep -c "ID=debian" /etc/os-release)" != "0" ]]; then
-        BUILD="debian10"
+        BUILD="debian"
         DIST="deb";
     fi
 
