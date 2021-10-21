@@ -15,7 +15,7 @@ function enable_verbose_commands() {
     set -x pipefail
 }
 
-function enable_verbose_commands() {
+function disable_verbose_commands() {
     set +x pipefail
 }
 
