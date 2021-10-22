@@ -11,6 +11,14 @@ function error_detect_off() {
     set +euo pipefail
 }
 
+function enable_verbose_commands() {
+    set -x pipefail
+}
+
+function disable_verbose_commands() {
+    set +x pipefail
+}
+
 function get_hostname() {
     HOSTNAME=$(curl --fail -s "http://169.254.169.254/latest/meta-data/hostname")
     echo "${HOSTNAME}"
@@ -143,6 +151,25 @@ function install_cloud_init() {
         echo "${RELEASE} is an invalid release option. Allowed: latest, nightly"
         exit 255
     fi
+    
+    # Lets remove all traces of previously installed cloud-init
+    # Ubuntu installs have proven problematic with their left over
+    # configs for the installer in recent versions
+    error_detect_off
+    
+    rm -rf /etc/cloud
+    rm -rf /etc/systemd/system/cloud-init.target.wants/*
+    rm -rf /usr/src/cloud*
+    rm -rf /usr/local/bin/cloud*
+    rm -rf /usr/bin/cloud*
+    rm -rf /usr/lib/cloud*
+    rm -rf /usr/local/bin/cloud*
+    rm -rf /lib/systemd/system/cloud*
+    rm -rf /var/lib/cloud
+    rm -rf /var/log/cloud*
+    rm -rf /run/cloud-init
+    
+    error_detect_on
 
     wget https://ewr1.vultrobjects.com/cloud_init_beta/cloud-init_${BUILD}_${RELEASE}.${DIST} -O /tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}
 
