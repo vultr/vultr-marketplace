@@ -156,13 +156,19 @@ function install_cloud_init() {
     # Ubuntu installs have proven problematic with their left over
     # configs for the installer in recent versions
     error_detect_off
+    
     rm -rf /etc/cloud
-    rm -rf /run/cloud-init
-    rm -rf /var/lib/cloud
-    rm -rf /var/log/cloud*
     rm -rf /etc/systemd/system/cloud-init.target.wants/*
+    rm -rf /usr/src/cloud*
+    rm -rf /usr/local/bin/cloud*
+    rm -rf /usr/bin/cloud*
+    rm -rf /usr/lib/cloud*
     rm -rf /usr/local/bin/cloud*
     rm -rf /lib/systemd/system/cloud*
+    rm -rf /var/lib/cloud
+    rm -rf /var/log/cloud*
+    rm -rf /run/cloud-init
+    
     error_detect_on
 
     wget https://ewr1.vultrobjects.com/cloud_init_beta/cloud-init_${BUILD}_${RELEASE}.${DIST} -O /tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}
