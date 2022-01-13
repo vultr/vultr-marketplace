@@ -76,7 +76,7 @@ function apt_update_safe() {
 
 function apt_upgrade_safe() {
     wait_on_apt_lock
-    apt upgrade -y
+    DEBIAN_FRONTEND=noninteractive apt upgrade -y
 }
 
 function apt_clean_safe() {
