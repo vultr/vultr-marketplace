@@ -35,7 +35,7 @@ function get_sshkeys() {
 }
 
 function get_var() {
-    local val="$(curl --fail -s  http://169.254.169.254//v1/internal/app-${1} 2>/dev/null)"
+    local val="$(curl --fail -s -H "Metadata-Token: vultr" http://169.254.169.254/v1/internal/app-${1} 2>/dev/null)"
 
     local __result=$1
     eval $__result="'${val}'"
