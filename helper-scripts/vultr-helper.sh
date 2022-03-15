@@ -41,10 +41,15 @@ function get_var() {
     eval $__result="'${val}'"
 }
 
-function wait_on_apt_lock() {
-    ## Return codes greater thn zero are expected in this loop.
-    error_detect_off
+function get_ip
+{
+    local val="$(curl --fail -s -H "Metadata-Token: vultr" http://169.254.169.254/v1/internal/meta-data/meta-data/public-ipv4 2>/dev/null)"
 
+    local __result=$1
+    eval $__result="'${val}'"
+}
+
+function wait_on_apt_lock() {
     DPKG_ID=$(lsof -t /var/lib/dpkg/lock)
     APT_ID=$(lsof -t /var/lib/apt/lists/lock)
     CACHE_ID=$(lsof -t /var/cache/apt/archives/lock)
@@ -59,9 +64,6 @@ function wait_on_apt_lock() {
     echo "/var/lib/dpkg/lock is unlocked."
     echo "/var/lib/apt/lists/lock is unlocked."
     echo "/var/cache/apt/archives/lock is unlocked."
-
-    ## Turn error detection back on.
-    error_detect_on
 }
 
 function apt_safe() {
@@ -160,8 +162,20 @@ function install_cloud_init() {
     # Lets remove all traces of previously installed cloud-init
     # Ubuntu installs have proven problematic with their left over
     # configs for the installer in recent versions
-    error_detect_off
+    cleanup_cloudinit || true
 
+    wget https://ewr1.vultrobjects.com/cloud_init_beta/cloud-init_${BUILD}_${RELEASE}.${DIST} -O /tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}
+
+    if [[ "${DIST}" == "rpm" ]]; then
+        yum install -y /tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}
+    elif [[ "${DIST}" == "deb" ]]; then
+        apt_safe /tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}
+    fi
+
+    rm -f /tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}
+}
+
+function cleanup_cloudinit() {
     rm -rf /etc/cloud
     rm -rf /etc/systemd/system/cloud-init.target.wants/*
     rm -rf /usr/src/cloud*
@@ -173,18 +187,6 @@ function install_cloud_init() {
     rm -rf /var/lib/cloud
     rm -rf /var/log/cloud*
     rm -rf /run/cloud-init
-
-    error_detect_on
-
-    wget https://ewr1.vultrobjects.com/cloud_init_beta/cloud-init_${BUILD}_${RELEASE}.${DIST} -O /tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}
-
-    if [[ "${DIST}" == "rpm" ]]; then
-        yum install -y /tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}
-    elif [[ "${DIST}" == "deb" ]]; then
-        apt_safe /tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}
-    fi
-
-    rm -f /tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}
 }
 
 function clean_tmp() {
@@ -264,15 +266,9 @@ function clean_system() {
     clean_random
     clean_machine_id
 
-    ## Errors during these cleanup steps are benign and expected on some OS.
-    error_detect_off
-
-    clean_mloc
-    clean_free_space
-    trim_ssd
-
-    ## Resume error checking
-    error_detect_on
+    clean_mloc || true
+    clean_free_space || true
+    trim_ssd || true
 
     cleanup_marketplace_scripts
 }
