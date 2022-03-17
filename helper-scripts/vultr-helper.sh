@@ -50,16 +50,16 @@ function get_ip
 }
 
 function wait_on_apt_lock() {
-    DPKG_ID=$(lsof -t /var/lib/dpkg/lock)
-    APT_ID=$(lsof -t /var/lib/apt/lists/lock)
-    CACHE_ID=$(lsof -t /var/cache/apt/archives/lock)
+    DPKG_ID=$(lsof -t /var/lib/dpkg/lock) || true
+    APT_ID=$(lsof -t /var/lib/apt/lists/lock) || true
+    CACHE_ID=$(lsof -t /var/cache/apt/archives/lock) || true
     until [[ "${DPKG_ID}${APT_ID}${CACHE_ID}" == "" ]]
     do
         echo "Waiting for apt lock held by: [${DPKG_ID}-${APT_ID}-${CACHE_ID}]"
         sleep 3
-        DPKG_ID=$(lsof -t /var/lib/dpkg/lock)
-        APT_ID=$(lsof -t /var/lib/apt/lists/lock)
-        CACHE_ID=$(lsof -t /var/cache/apt/archives/lock)
+        DPKG_ID=$(lsof -t /var/lib/dpkg/lock) || true
+        APT_ID=$(lsof -t /var/lib/apt/lists/lock) || true
+        CACHE_ID=$(lsof -t /var/cache/apt/archives/lock) || true
     done
     echo "/var/lib/dpkg/lock is unlocked."
     echo "/var/lib/apt/lists/lock is unlocked."
