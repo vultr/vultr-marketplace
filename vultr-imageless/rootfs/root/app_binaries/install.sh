@@ -8,7 +8,7 @@ set -x
 # as a vendor-script to make common procedures easier. It
 # will appear on all images, Vultr ones and Custom alike.
 # URL: https://raw.githubusercontent.com/vultr/vultr-marketplace/main/helper-scripts/vultr-helper.sh
-. /opt/vultr/vultr_app.sh
+. /var/lib/vultr/vultr_app.sh
 
 
 
