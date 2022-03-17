@@ -7,5 +7,4 @@ chmod +x vultr-helper.sh
 
 ################################################
 ## Prepare server for Marketplace snapshot
-error_detect_on
 clean_system
