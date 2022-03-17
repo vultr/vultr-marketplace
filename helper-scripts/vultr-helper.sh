@@ -11,6 +11,14 @@ function error_detect_off() {
     set +euo pipefail
 }
 
+function enable_verbose_commands() {
+    set -x pipefail
+}
+
+function disable_verbose_commands() {
+    set +x pipefail
+}
+
 function get_hostname() {
     HOSTNAME=$(curl --fail -s "http://169.254.169.254/latest/meta-data/hostname")
     echo "${HOSTNAME}"
@@ -27,33 +35,35 @@ function get_sshkeys() {
 }
 
 function get_var() {
-    local val="$(curl --fail -s  http://169.254.169.254//v1/internal/app-${1} 2>/dev/null)"
+    local val="$(curl --fail -s -H "Metadata-Token: vultr" http://169.254.169.254/v1/internal/app-${1} 2>/dev/null)"
+
+    local __result=$1
+    eval $__result="'${val}'"
+}
+
+function get_ip
+{
+    local val="$(curl --fail -s -H "Metadata-Token: vultr" http://169.254.169.254/v1/internal/meta-data/meta-data/public-ipv4 2>/dev/null)"
 
     local __result=$1
     eval $__result="'${val}'"
 }
 
 function wait_on_apt_lock() {
-    ## Return codes greater thn zero are expected in this loop.
-    error_detect_off
-
-    DPKG_ID=$(lsof -t /var/lib/dpkg/lock)
-    APT_ID=$(lsof -t /var/lib/apt/lists/lock)
-    CACHE_ID=$(lsof -t /var/cache/apt/archives/lock)
+    DPKG_ID=$(lsof -t /var/lib/dpkg/lock) || true
+    APT_ID=$(lsof -t /var/lib/apt/lists/lock) || true
+    CACHE_ID=$(lsof -t /var/cache/apt/archives/lock) || true
     until [[ "${DPKG_ID}${APT_ID}${CACHE_ID}" == "" ]]
     do
         echo "Waiting for apt lock held by: [${DPKG_ID}-${APT_ID}-${CACHE_ID}]"
         sleep 3
-        DPKG_ID=$(lsof -t /var/lib/dpkg/lock)
-        APT_ID=$(lsof -t /var/lib/apt/lists/lock)
-        CACHE_ID=$(lsof -t /var/cache/apt/archives/lock)
+        DPKG_ID=$(lsof -t /var/lib/dpkg/lock) || true
+        APT_ID=$(lsof -t /var/lib/apt/lists/lock) || true
+        CACHE_ID=$(lsof -t /var/cache/apt/archives/lock) || true
     done
     echo "/var/lib/dpkg/lock is unlocked."
     echo "/var/lib/apt/lists/lock is unlocked."
     echo "/var/cache/apt/archives/lock is unlocked."
-
-    ## Turn error detection back on.
-    error_detect_on
 }
 
 function apt_safe() {
@@ -68,7 +78,12 @@ function apt_update_safe() {
 
 function apt_upgrade_safe() {
     wait_on_apt_lock
-    apt upgrade -y
+    DEBIAN_FRONTEND=noninteractive apt upgrade -y
+}
+
+function apt_remove_safe() {
+    wait_on_apt_lock
+    apt remove -y $@ --auto-remove
 }
 
 function apt_clean_safe() {
@@ -144,6 +159,11 @@ function install_cloud_init() {
         exit 255
     fi
 
+    # Lets remove all traces of previously installed cloud-init
+    # Ubuntu installs have proven problematic with their left over
+    # configs for the installer in recent versions
+    cleanup_cloudinit || true
+
     wget https://ewr1.vultrobjects.com/cloud_init_beta/cloud-init_${BUILD}_${RELEASE}.${DIST} -O /tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}
 
     if [[ "${DIST}" == "rpm" ]]; then
@@ -153,6 +173,20 @@ function install_cloud_init() {
     fi
 
     rm -f /tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}
+}
+
+function cleanup_cloudinit() {
+    rm -rf /etc/cloud
+    rm -rf /etc/systemd/system/cloud-init.target.wants/*
+    rm -rf /usr/src/cloud*
+    rm -rf /usr/local/bin/cloud*
+    rm -rf /usr/bin/cloud*
+    rm -rf /usr/lib/cloud*
+    rm -rf /usr/local/bin/cloud*
+    rm -rf /lib/systemd/system/cloud*
+    rm -rf /var/lib/cloud
+    rm -rf /var/log/cloud*
+    rm -rf /run/cloud-init
 }
 
 function clean_tmp() {
@@ -232,15 +266,9 @@ function clean_system() {
     clean_random
     clean_machine_id
 
-    ## Errors during these cleanup steps are benign and expected on some OS.
-    error_detect_off
-
-    clean_mloc
-    clean_free_space
-    trim_ssd
-
-    ## Resume error checking
-    error_detect_on
+    clean_mloc || true
+    clean_free_space || true
+    trim_ssd || true
 
     cleanup_marketplace_scripts
 }
