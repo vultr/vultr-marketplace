@@ -1,0 +1,2 @@
+You can do binaries, but you will need to mark them with chmod +x before they can be executed as the binary
+generator will only make files executable if they start with #!
