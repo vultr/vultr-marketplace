@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################
 ## Build example snapshot for Vultr Marketplace
-## Tested on CentOS 7
+## Tested on CentOS 8
 ##
 ## Prerequisites
 chmod +x /root/vultr-helper.sh
@@ -13,5 +13,7 @@ install_cloud_init latest
 ## Install your app here.
 
 ################################################
-## Prepare server snapshot for Marketplace.
+## Disable NetworkManager, replace with network-scripts on CentOS8.
+disable_network_manager
+## Prepare server snapshot for Marketplace
 clean_system
