@@ -26,38 +26,38 @@ function disable_verbose_commands()
 function get_hostname()
 {
     local hostname
-	hostname=$(curl --fail -s "http://169.254.169.254/latest/meta-data/hostname")
+    hostname=$(curl --fail -s "http://169.254.169.254/latest/meta-data/hostname")
     echo "${hostname}"
 }
 
 function get_userdata()
 {
     local userdata
-	userdata=$(curl --fail -s "http://169.254.169.254/latest/user-data")
+    userdata=$(curl --fail -s "http://169.254.169.254/latest/user-data")
     echo "${userdata}"
 }
 
 function get_sshkeys()
 {
     local ssh_keys
-	ssh_keys=$(curl --fail -s "http://169.254.169.254/current/ssh-keys")
+    ssh_keys=$(curl --fail -s "http://169.254.169.254/current/ssh-keys")
     echo "${ssh_keys}"
 }
 
 function get_var()
 {
-	local var_name="${1:-}"
+    local var_name="${1:-}"
     local var_val
-	var_val="$(curl --fail -s -H "Metadata-Token: vultr" "http://169.254.169.254/v1/internal/app-${var_name}" 2>/dev/null)"
+    var_val="$(curl --fail -s -H "Metadata-Token: vultr" "http://169.254.169.254/v1/internal/app-${var_name}" 2>/dev/null)"
 
     eval "${var_name}='${var_val}'"
 }
 
 function get_ip()
 {
-	local ip_var="${1:-}"
+    local ip_var="${1:-}"
     local ip_val
-	ip_val="$(curl --fail -s -H "Metadata-Token: vultr" http://169.254.169.254/v1/internal/meta-data/meta-data/public-ipv4 2>/dev/null)"
+    ip_val="$(curl --fail -s -H "Metadata-Token: vultr" http://169.254.169.254/v1/internal/meta-data/meta-data/public-ipv4 2>/dev/null)"
 
     eval "${ip_var}='${ip_val}'"
 }
@@ -174,7 +174,7 @@ function install_cloud_init()
     cleanup_cloudinit
 
     wget -O "/tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}" \
-		"https://ewr1.vultrobjects.com/cloud_init_beta/cloud-init_${BUILD}_${RELEASE}.${DIST}"
+        "https://ewr1.vultrobjects.com/cloud_init_beta/cloud-init_${BUILD}_${RELEASE}.${DIST}"
 
     if [[ "${DIST}" == "rpm" ]]; then
         yum install -y "/tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}"
@@ -260,8 +260,8 @@ function disable_network_manager() {
     ## Disable NetworkManager, replace with network-scripts
     systemctl disable --now NetworkManager
     sed -i \
-		-e 's/^ONBOOT.*/ONBOOT=yes/g' \
-		-e 's/^NM_CONTROLLED.*/NM_CONTROLLED=no/g' /etc/sysconfig/network-scripts/ifcfg-*
+        -e 's/^ONBOOT.*/ONBOOT=yes/g' \
+        -e 's/^NM_CONTROLLED.*/NM_CONTROLLED=no/g' /etc/sysconfig/network-scripts/ifcfg-*
     yum install -y network-scripts
 }
 
