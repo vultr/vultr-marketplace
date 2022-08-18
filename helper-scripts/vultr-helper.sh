@@ -57,7 +57,7 @@ function get_ip()
 {
     local ip_var="${1:-}"
     local ip_val
-    ip_val="$(curl --fail -s -H "Metadata-Token: vultr" http://169.254.169.254/v1/internal/meta-data/meta-data/public-ipv4 2>/dev/null)"
+    ip_val="$(curl --fail -s -H "Metadata-Token: vultr" http://169.254.169.254/meta-data/meta-data/public-ipv4 2>/dev/null)"
 
     eval "${ip_var}='${ip_val}'"
 }
