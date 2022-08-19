@@ -186,17 +186,16 @@ function install_cloud_init()
 }
 
 function cleanup_cloudinit() {
-    rm -rf /etc/cloud
-    rm -rf /etc/systemd/system/cloud-init.target.wants/*
-    rm -rf /usr/src/cloud*
-    rm -rf /usr/local/bin/cloud*
-    rm -rf /usr/bin/cloud*
-    rm -rf /usr/lib/cloud*
-    rm -rf /usr/local/bin/cloud*
-    rm -rf /lib/systemd/system/cloud*
-    rm -rf /var/lib/cloud
-    rm -rf /var/log/cloud*
-    rm -rf /run/cloud-init
+    rm -rf \
+        /etc/cloud \
+        /etc/systemd/system/cloud-init.target.wants/* \
+        /lib/systemd/system/cloud* \
+        /run/cloud-init \
+        /usr/bin/cloud* \
+        /usr/lib/cloud* \
+        /usr/local/bin/cloud* \
+        /usr/src/cloud* \
+        /var/log/cloud*
 }
 
 function clean_tmp() {
@@ -229,7 +228,7 @@ function clean_history() {
 }
 
 function clean_mloc() {
-    /usr/bin/updatedb
+    /usr/bin/updatedb || true
 }
 
 function clean_random() {
@@ -242,14 +241,14 @@ function clean_machine_id() {
 }
 
 function clean_free_space() {
-    dd if=/dev/zero of=/zerofile
+    dd if=/dev/zero of=/zerofile || true
     sync
     rm -f /zerofile
     sync
 }
 
 function trim_ssd() {
-    fstrim /
+    fstrim / || true
 }
 
 function cleanup_marketplace_scripts() {
