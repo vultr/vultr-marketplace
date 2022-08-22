@@ -1,5 +1,7 @@
 #!/bin/bash
 
+shopt -s inherit_errexit
+
 ###################################################################
 ## Vultr Marketplace Helper Functions
 
@@ -23,32 +25,36 @@ function disable_verbose_commands()
     set +x
 }
 
+function get_metadata_item()
+{
+    local item_path="${1:-}"
+    local item_value
+
+    item_value="$(curl --fail --silent --header "Metadata-Token: vultr" "http://169.254.169.254/${item_path}")"
+
+    echo "${item_value}"
+}
+
 function get_hostname()
 {
-    local hostname
-    hostname=$(curl --fail -s "http://169.254.169.254/latest/meta-data/hostname")
-    echo "${hostname}"
+    get_metadata_item "latest/meta-data/hostname"
 }
 
 function get_userdata()
 {
-    local userdata
-    userdata=$(curl --fail -s "http://169.254.169.254/latest/user-data")
-    echo "${userdata}"
+    get_metadata_item "latest/user-data"
 }
 
 function get_sshkeys()
 {
-    local ssh_keys
-    ssh_keys=$(curl --fail -s "http://169.254.169.254/current/ssh-keys")
-    echo "${ssh_keys}"
+    get_metadata_item "current/ssh-keys"
 }
 
 function get_var()
 {
     local var_name="${1:-}"
     local var_val
-    var_val="$(curl --fail -s -H "Metadata-Token: vultr" "http://169.254.169.254/v1/internal/app-${var_name}" 2>/dev/null)"
+    var_val="$(get_metadata_item "v1/internal/app-${var_name}" 2>/dev/null)"
 
     eval "${var_name}='${var_val}'"
 }
@@ -57,7 +63,7 @@ function get_ip()
 {
     local ip_var="${1:-}"
     local ip_val
-    ip_val="$(curl --fail -s -H "Metadata-Token: vultr" http://169.254.169.254/meta-data/meta-data/public-ipv4 2>/dev/null)"
+    ip_val="$(get_metadata_item "latest/meta-data/public-ipv4" 2>/dev/null)"
 
     eval "${ip_var}='${ip_val}'"
 }
@@ -106,7 +112,6 @@ function apt_clean_safe()
 
 function update_and_clean_packages()
 {
-
     # RHEL/CentOS
     if [[ -f /etc/redhat-release ]]; then
         yum update -y
@@ -133,38 +138,16 @@ function set_vultr_kernel_option()
 
 function install_cloud_init()
 {
-
-    if command -v cloud-init >/dev/null 2>&1; then
+    local cloud_init_exe
+    cloud_init_exe="$(command -v cloud-init >/dev/null 2>&1)"
+    if [[ -x "${cloud_init_exe}" ]]; then
         echo "cloud-init is already installed."
         return
     fi
 
-    update_and_clean_packages
-
-    if [[ -f /etc/redhat-release ]]; then
-        BUILD="rhel"
-        DIST="rpm"
-    elif grep -qs "ubuntu" /etc/os-release 2>/dev/null; then
-        BUILD="universal"
-        DIST="deb";
-    elif grep -qs "debian" /etc/os-release 2>/dev/null; then
-        BUILD="debian"
-        DIST="deb";
-    fi
-
-    if [[ "${DIST}" == "" ]]; then
-        echo "Undetected OS, please install from source!"
-        exit 255
-    fi
-
-    RELEASE=$1
-
-    if [[ "${RELEASE}" == "" ]]; then
-        RELEASE="latest"
-    fi
-
-    if [[ "${RELEASE}" != "latest" ]] && [[ "${RELEASE}" != "nightly" ]]; then
-        echo "${RELEASE} is an invalid release option. Allowed: latest, nightly"
+	local release_version="${1:-"latest"}"
+    if [[ "${release_version}" != "latest" && "${release_version}" != "nightly" ]]; then
+        echo "${release_version} is an invalid release option. Allowed: latest, nightly"
         exit 255
     fi
 
@@ -173,19 +156,57 @@ function install_cloud_init()
     # configs for the installer in recent versions
     cleanup_cloudinit
 
-    wget -O "/tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}" \
-        "https://ewr1.vultrobjects.com/cloud_init_beta/cloud-init_${BUILD}_${RELEASE}.${DIST}"
+    update_and_clean_packages
 
-    if [[ "${DIST}" == "rpm" ]]; then
-        yum install -y "/tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}"
-    elif [[ "${DIST}" == "deb" ]]; then
-        apt_safe "/tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}"
-    fi
+    local build_type
+    local package_ext
 
-    rm -f "/tmp/cloud-init_${BUILD}_${RELEASE}.${DIST}"
+    [[ -e /etc/os-release ]] && . /etc/os-release
+    case "${ID:-}" in
+    debian)
+        build_type="debian"
+        package_ext="deb"
+        ;;
+    fedora)
+        build_type="rhel"
+        package_ext="rpm"
+        ;;
+    ubuntu)
+        build_type="universal"
+        package_ext="deb"
+        ;;
+    *)
+        case "${ID_LIKE:-}" in
+        *rhel*)
+            build_type="rhel"
+            package_ext="rpm"
+            ;;
+        *)
+            echo "Unable to determine OS. Please install from source!"
+            exit 255
+        esac
+    esac
+
+    local cloud_init_package="cloud-init_${build_type}_${release_version}.${package_ext}"
+    wget -O "/tmp/${cloud_init_package}" "https://ewr1.vultrobjects.com/cloud_init_beta/${cloud_init_package}"
+
+    case "${package_ext}" in
+    rpm)
+        yum install -y "/tmp/${cloud_init_package}"
+        ;;
+    deb)
+        apt_safe "/tmp/${cloud_init_package}"
+        ;;
+    *)
+        echo "Unable to determine package installation method."
+        exit 255
+    esac
+
+    rm -f "/tmp/${cloud_init_package}"
 }
 
-function cleanup_cloudinit() {
+function cleanup_cloudinit()
+{
     rm -rf \
         /etc/cloud \
         /etc/systemd/system/cloud-init.target.wants/* \
@@ -198,64 +219,76 @@ function cleanup_cloudinit() {
         /var/log/cloud*
 }
 
-function clean_tmp() {
+function clean_tmp()
+{
     mkdir -p /tmp
     chmod 1777 /tmp
-    rm -rf /tmp/*
-    rm -rf /var/tmp/*
+    rm -rf /tmp/* /var/tmp/*
 }
 
-function clean_keys() {
+function clean_keys()
+{
     rm -f /root/.ssh/authorized_keys /etc/ssh/*key*
     touch /etc/ssh/revoked_keys
     chmod 600 /etc/ssh/revoked_keys
 }
 
-function clean_logs() {
+function clean_logs()
+{
     find /var/log -mtime -1 -type f -exec truncate -s 0 {} \;
-    rm -rf /var/log/*.gz
-    rm -rf /var/log/*.[0-9]
-    rm -rf /var/log/*.log
-    rm -rf /var/log/lastlog
-    rm -rf /var/log/wtmp
+    rm -rf \
+        /var/log/*.[0-9] \
+        /var/log/*.gz \
+        /var/log/*.log \
+        /var/log/lastlog \
+        /var/log/wtmp
+
     : > /var/log/auth.log
 }
 
-function clean_history() {
+function clean_history()
+{
     history -c
     : > /root/.bash_history
     unset HISTFILE
 }
 
-function clean_mloc() {
+function clean_mloc()
+{
     /usr/bin/updatedb || true
 }
 
-function clean_random() {
+function clean_random()
+{
     rm -f /var/lib/systemd/random-seed
 }
 
-function clean_machine_id() {
-    rm -f /etc/machine-id
-    touch /etc/machine-id
+function clean_machine_id()
+{
+    [[ -e /etc/machine-id ]] && : > /etc/machine-id
+    [[ -e /var/lib/dbus/machine-id ]] && : > /var/lib/dbus/machine-id
 }
 
-function clean_free_space() {
+function clean_free_space()
+{
     dd if=/dev/zero of=/zerofile || true
     sync
     rm -f /zerofile
     sync
 }
 
-function trim_ssd() {
+function trim_ssd()
+{
     fstrim / || true
 }
 
-function cleanup_marketplace_scripts() {
+function cleanup_marketplace_scripts()
+{
     rm -f /root/*.sh
 }
 
-function disable_network_manager() {
+function disable_network_manager()
+{
     ## Disable NetworkManager, replace with network-scripts
     systemctl disable --now NetworkManager
     sed -i \
@@ -264,7 +297,8 @@ function disable_network_manager() {
     yum install -y network-scripts
 }
 
-function clean_system() {
+function clean_system()
+{
 
     update_and_clean_packages
     set_vultr_kernel_option
