@@ -138,9 +138,7 @@ function set_vultr_kernel_option()
 
 function install_cloud_init()
 {
-    local cloud_init_exe
-    cloud_init_exe="$(command -v cloud-init >/dev/null 2>&1)"
-    if [[ -x "${cloud_init_exe}" ]]; then
+    if [[ -x "$(command -v cloud-init >/dev/null 2>&1)" ]]; then
         echo "cloud-init is already installed."
         return
     fi
