@@ -1,18 +1,25 @@
 #!/bin/bash
 
-shopt -s inherit_errexit
-
 ###################################################################
 ## Vultr Marketplace Helper Functions
+
+function inherit_errexit()
+{
+    if ! shopt -sq inherit_errexit > /dev/null 2>&1; then
+        echo "Unable to enable inherit_errexit"
+    fi
+}
 
 function error_detect_on()
 {
     set -euo pipefail
+    inherit_errexit
 }
 
 function error_detect_off()
 {
     set +euo pipefail
+    inherit_errexit
 }
 
 function enable_verbose_commands()
@@ -138,7 +145,8 @@ function set_vultr_kernel_option()
 
 function install_cloud_init()
 {
-    if [[ -x "$(command -v cloud-init >/dev/null 2>&1)" ]]; then
+    local cloudinit_exe=""
+    if cloudinit_exe="$(command -v cloud-init 2>/dev/null)" && [[ -x "${cloudinit_exe}" ]]; then
         echo "cloud-init is already installed."
         return
     fi
